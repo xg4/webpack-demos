@@ -1,12 +1,13 @@
 const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
-const OptimizeCssAssetsWebpackPlugin = require('optimize-css-assets-webpack-plugin')
+const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin')
+const TerserJSPlugin = require('terser-webpack-plugin')
 
 const resolve = dir => path.resolve(__dirname, dir)
 
 module.exports = {
-  mode: 'development', // production development
+  mode: 'production', // production development
   entry: './src/index.js',
   output: {
     filename: 'index.[hash:6].js',
@@ -33,7 +34,12 @@ module.exports = {
       {
         test: /\.less$/,
         use: [
-          MiniCssExtractPlugin.loader,
+          {
+            loader: MiniCssExtractPlugin.loader,
+            options: {
+              hmr: process.env.NODE_ENV === 'development'
+            }
+          },
           'css-loader',
           'postcss-loader', // 处理 css 浏览器前缀、css next 等
           'less-loader'
@@ -49,7 +55,8 @@ module.exports = {
   // 优化
   optimization: {
     minimizer: [
-      new OptimizeCssAssetsWebpackPlugin() // 压缩 css
+      new TerserJSPlugin({}), // 压缩 js
+      new OptimizeCssAssetsPlugin({}) // 压缩 css
     ]
   },
   plugins: [
@@ -64,7 +71,8 @@ module.exports = {
     }),
     // 导出 css 为文件
     new MiniCssExtractPlugin({
-      filename: 'index.css'
+      filename: '[name].css', // production '[name].[hash].css'
+      chunkFilename: '[id].css'
     })
   ]
 }
