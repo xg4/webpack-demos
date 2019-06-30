@@ -8,5 +8,10 @@ module.exports = {
   output: {
     filename: 'index.min.js',
     path: resolve('dist')
+  },
+  devServer: {
+    port: 3000,
+    progress: true,
+    compress: true // 压缩
   }
 }
