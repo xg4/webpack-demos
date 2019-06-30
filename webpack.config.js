@@ -7,7 +7,7 @@ const TerserJSPlugin = require('terser-webpack-plugin')
 const resolve = dir => path.resolve(__dirname, dir)
 
 module.exports = {
-  mode: 'production', // production development
+  mode: 'development', // production development
   entry: './src/index.js',
   output: {
     filename: 'index.[hash:6].js',
@@ -18,6 +18,10 @@ module.exports = {
     // 规则
     // loader 单一性，只处理一件事情，默认顺序是从右向左执行
     rules: [
+      {
+        test: /\.js$/,
+        use: ['babel-loader']
+      },
       {
         test: /\.css$/,
         use: [
