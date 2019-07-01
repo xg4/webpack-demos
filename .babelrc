@@ -1,0 +1,7 @@
+{
+  "presets": [
+    "@babel/env", // es+ 转 es5
+    "@babel/typescript", // 处理 typescript
+    "@babel/react" // 处理 react
+  ]
+}
