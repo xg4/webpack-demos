@@ -5,22 +5,40 @@ const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin')
 const TerserJSPlugin = require('terser-webpack-plugin')
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin')
 const Webpack = require('webpack')
+const { CleanWebpackPlugin } = require('clean-webpack-plugin')
+const CopyWebpackPlugin = require('copy-webpack-plugin')
 
 const resolve = dir => path.resolve(__dirname, dir)
 
-const APP_PATH = resolve('src')
-const BUILD_PATH = resolve('dist')
-
 module.exports = {
-  mode: 'development', // production development
-  entry: APP_PATH,
+  // production development
+  mode: 'development',
+  entry: resolve('src/index.js'),
   output: {
     filename: 'index.[hash:6].js',
-    path: BUILD_PATH,
+    path: resolve('dist'),
     publicPath: '/'
   },
+  // 调试工具，源码映射 https://webpack.js.org/configuration/devtool/
+  // production 下不会生成映射文件
+  // 1. source-map 生成源码映射文件
+  // 2. eval-source-map 不生成单独的映射文件，生成在文件中可以显示行和列
+  // 3. cheap-module-source-map 是一个单独的映射文件，但不会生成列
+  // 4. cheap-module-eval-source-map
+  // devtool: 'source-map',
+  // 监控打包文件，更改重新打开
+  // watch: true,
+  // watchOptions: {
+  //   // 每秒查看 1000 次
+  //   poll: 1000,
+  //   // 防抖
+  //   aggreatement: 500,
+  //   // 不监控那些文件
+  //   ignored: /node_modules/
+  // },
   resolve: {
-    extensions: ['.ts', '.tsx', '.js', '.json'] // 默认处理这些后缀的文件
+    // 默认处理这些后缀的文件
+    extensions: ['.ts', '.tsx', '.js', '.json']
   },
   // 直接使用外部引用，并不需要打包进项目的模块
   externals: {
@@ -120,6 +138,17 @@ module.exports = {
     ]
   },
   plugins: [
+    // 版权声明
+    new Webpack.BannerPlugin(`${new Date()} by xg4`),
+    // 直接 copy 不需要打包的文件到 dist 目录
+    new CopyWebpackPlugin([
+      {
+        from: resolve('public/robots.txt'),
+        to: resolve('dist')
+      }
+    ]),
+    // 清理上次打包之后的文件
+    new CleanWebpackPlugin(),
     // 关联 html
     new HtmlWebpackPlugin({
       template: resolve('public/index.html'),
