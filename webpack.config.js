@@ -36,9 +36,16 @@ module.exports = {
   //   // 不监控那些文件
   //   ignored: /node_modules/
   // },
+  // 解析 https://webpack.js.org/configuration/resolve/
   resolve: {
     // 默认处理这些后缀的文件
-    extensions: ['.ts', '.tsx', '.js', '.json']
+    extensions: ['.ts', '.tsx', '.js', '.json'],
+    // 别名
+    alias: {
+      components: resolve('src/components')
+    }
+    //
+    // mainFiles: []
   },
   // 直接使用外部引用，并不需要打包进项目的模块
   externals: {
@@ -128,7 +135,24 @@ module.exports = {
   devServer: {
     port: 3000,
     progress: true,
-    compress: true // 压缩
+    // 压缩
+    compress: true
+    // 1. http proxy 跨域问题
+    // proxy: {
+    // '/api': 'https://localhost'
+    //   '/api': {
+    //     target: 'https://localhost',
+    //     pathRewrite: { '/api': '' }
+    //   }
+    // },
+    // 2. 模拟数据 mock
+    // before 钩子函数
+    //  app 是 express
+    // before(app) {
+    //   app.get('/user', (req, res) => {
+    //     res.json({ name: 'hello' })
+    //   })
+    // }
   },
   // 优化
   optimization: {
