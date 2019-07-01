@@ -8,19 +8,23 @@ const Webpack = require('webpack')
 
 const resolve = dir => path.resolve(__dirname, dir)
 
-const APP_PATH = resolve('src')
-const BUILD_PATH = resolve('dist')
-
 module.exports = {
-  mode: 'development', // production development
-  entry: APP_PATH,
+  // production development
+  mode: 'development',
+  // 多入口
+  entry: {
+    home: resolve('src/home'),
+    other: resolve('src/other')
+  },
   output: {
-    filename: 'index.[hash:6].js',
-    path: BUILD_PATH,
+    // [name] home, other
+    filename: '[name].[hash:6].js',
+    path: resolve('dist'),
     publicPath: '/'
   },
   resolve: {
-    extensions: ['.ts', '.tsx', '.js', '.json'] // 默认处理这些后缀的文件
+    // 默认处理这些后缀的文件
+    extensions: ['.ts', '.tsx', '.js', '.json']
   },
   // 直接使用外部引用，并不需要打包进项目的模块
   externals: {
@@ -121,13 +125,24 @@ module.exports = {
   },
   plugins: [
     // 关联 html
+    // new HtmlWebpackPlugin({
+    //   template: resolve('public/index.html'),
+    //   filename: 'index.html',
+    //   minify: {
+    //     removeAttributeQuotes: true, // 删除双引号
+    //     collapseWhitespace: true // 折叠成一行
+    //   }
+    // }),
+    // 多页
     new HtmlWebpackPlugin({
-      template: resolve('public/index.html'),
-      filename: 'index.html'
-      // minify: {
-      //   removeAttributeQuotes: true, //删除双引号
-      //   collapseWhitespace: true // 折叠成一行
-      // }
+      template: resolve('public/home.html'),
+      filename: 'home.html',
+      chunks: ['home']
+    }),
+    new HtmlWebpackPlugin({
+      template: resolve('public/other.html'),
+      filename: 'other.html',
+      chunks: ['other']
     }),
     // 导出 css 为文件
     new MiniCssExtractPlugin({
