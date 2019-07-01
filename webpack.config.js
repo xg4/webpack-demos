@@ -38,12 +38,13 @@ module.exports = {
         test: require.resolve('jquery'),
         use: 'expose-loader?$'
       },
-      // {
-      //   test: /\.js$/,
-      //   loader: 'eslint-loader',
-      //   enforce: 'pre', // previous 前置loader， pre / post
-      //   exclude: /node_modules/
-      // },
+      // eslint
+      {
+        test: /\.js$/,
+        loader: 'eslint-loader',
+        enforce: 'pre', // previous 前置loader， pre / post
+        exclude: /node_modules/
+      },
       {
         test: /\.(ts|js)x?$/,
         exclude: /node_modules/,
