@@ -1,8 +1,6 @@
 const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
-const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin')
-const TerserJSPlugin = require('terser-webpack-plugin')
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin')
 const Webpack = require('webpack')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
@@ -11,31 +9,12 @@ const CopyWebpackPlugin = require('copy-webpack-plugin')
 const resolve = dir => path.resolve(__dirname, dir)
 
 module.exports = {
-  // production development
-  mode: 'development',
   entry: resolve('src/index.js'),
   output: {
     filename: 'index.[hash:6].js',
     path: resolve('dist'),
     publicPath: '/'
   },
-  // 调试工具，源码映射 https://webpack.js.org/configuration/devtool/
-  // production 下不会生成映射文件
-  // 1. source-map 生成源码映射文件
-  // 2. eval-source-map 不生成单独的映射文件，生成在文件中可以显示行和列
-  // 3. cheap-module-source-map 是一个单独的映射文件，但不会生成列
-  // 4. cheap-module-eval-source-map
-  // devtool: 'source-map',
-  // 监控打包文件，更改重新打开
-  // watch: true,
-  // watchOptions: {
-  //   // 每秒查看 1000 次
-  //   poll: 1000,
-  //   // 防抖
-  //   aggreatement: 500,
-  //   // 不监控那些文件
-  //   ignored: /node_modules/
-  // },
   // 解析 https://webpack.js.org/configuration/resolve/
   resolve: {
     // 默认处理这些后缀的文件
@@ -132,45 +111,8 @@ module.exports = {
       }
     ]
   },
-  devServer: {
-    port: 3000,
-    progress: true,
-    // 压缩
-    compress: true
-    // 1. http proxy 跨域问题
-    // proxy: {
-    // '/api': 'https://localhost'
-    //   '/api': {
-    //     target: 'https://localhost',
-    //     pathRewrite: { '/api': '' }
-    //   }
-    // },
-    // 2. 模拟数据 mock
-    // before 钩子函数
-    //  app 是 express
-    // before(app) {
-    //   app.get('/user', (req, res) => {
-    //     res.json({ name: 'hello' })
-    //   })
-    // }
-  },
-  // 优化
-  optimization: {
-    minimizer: [
-      // 压缩 js
-      new TerserJSPlugin({}),
-      // 压缩 css
-      new OptimizeCssAssetsPlugin({})
-    ]
-  },
+
   plugins: [
-    // 全局注入环境变量
-    new Webpack.DefinePlugin({
-      NODE_ENV: JSON.stringify(process.env.NODE_ENV),
-      ENV: JSON.stringify('hello')
-    }),
-    // 版权声明
-    new Webpack.BannerPlugin(`${new Date()} by xg4`),
     // 直接 copy 不需要打包的文件到 dist 目录
     new CopyWebpackPlugin([
       {
