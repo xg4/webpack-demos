@@ -7,3 +7,6 @@ import $ from 'jquery'
 console.log(window.$, 'window $')
 
 console.log($, 'index $')
+
+// eslint-disable-next-line no-undef
+console.log(NODE_ENV, ENV, 'env')

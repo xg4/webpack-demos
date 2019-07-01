@@ -157,11 +157,18 @@ module.exports = {
   // 优化
   optimization: {
     minimizer: [
-      new TerserJSPlugin({}), // 压缩 js
-      new OptimizeCssAssetsPlugin({}) // 压缩 css
+      // 压缩 js
+      new TerserJSPlugin({}),
+      // 压缩 css
+      new OptimizeCssAssetsPlugin({})
     ]
   },
   plugins: [
+    // 全局注入环境变量
+    new Webpack.DefinePlugin({
+      NODE_ENV: JSON.stringify(process.env.NODE_ENV),
+      ENV: JSON.stringify('hello')
+    }),
     // 版权声明
     new Webpack.BannerPlugin(`${new Date()} by xg4`),
     // 直接 copy 不需要打包的文件到 dist 目录
