@@ -4,6 +4,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin')
 const TerserJSPlugin = require('terser-webpack-plugin')
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin')
+const Webpack = require('webpack')
 
 const resolve = dir => path.resolve(__dirname, dir)
 
@@ -20,11 +21,23 @@ module.exports = {
   resolve: {
     extensions: ['.ts', '.tsx', '.js', '.json'] // 默认处理这些后缀的文件
   },
+  // 直接使用外部引用，并不需要打包进项目的模块
+  externals: {
+    jquery: 'jQuery'
+  },
   // 模块
   module: {
     // 规则
     // loader 单一性，只处理一件事情，默认顺序是从后向前执行
+    // 前置loader pre，普通loader normal，内联loader，后置loader post,
     rules: [
+      // import当前模块之后
+      // 暴露模块到全局对象 window 上
+      // 也可以使用內联的形式
+      {
+        test: require.resolve('jquery'),
+        use: 'expose-loader?$'
+      },
       // {
       //   test: /\.js$/,
       //   loader: 'eslint-loader',
@@ -92,6 +105,11 @@ module.exports = {
       filename: '[name].css', // production '[name].[hash].css'
       chunkFilename: '[id].css'
     }),
-    new ForkTsCheckerWebpackPlugin() // check
+    // check
+    new ForkTsCheckerWebpackPlugin(),
+    // 在每个模块中直接注入某个模块，无需引用，直接调用
+    new Webpack.ProvidePlugin({
+      $: 'jquery'
+    })
   ]
 }
