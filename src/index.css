@@ -1,4 +1,5 @@
 body {
   margin: 0;
   background-color: #eee;
+  background-image: url('./assets/images/box.jpg');
 }
