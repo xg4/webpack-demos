@@ -10,6 +10,7 @@ module.exports = {
     path: resolve('dist')
   },
   resolveLoader: {
+    // loader 查找模块
     modules: ['node_modules', resolve('loaders')],
     // loader 别名
     alias: {
@@ -20,7 +21,22 @@ module.exports = {
     rules: [
       {
         test: /\.js$/,
+        // loader 绝对路径
         use: resolve('loaders/x-loader.js')
+      },
+      {
+        test: /\.js$/,
+        use: ['1-loader'],
+        enforce: 'pre'
+      },
+      {
+        test: /\.js$/,
+        use: ['2-loader']
+      },
+      {
+        test: /\.js$/,
+        use: ['3-loader'],
+        enforce: 'post'
       }
     ]
   }
