@@ -17,8 +17,21 @@ module.exports = {
       'x-loader': resolve('loaders/x-loader.js')
     }
   },
+  devtool: 'source-map',
   module: {
     rules: [
+      {
+        test: /\.js$/,
+        // loader 绝对路径
+        use: [
+          {
+            loader: 'babel-loader',
+            options: {
+              presets: ['@babel/preset-env']
+            }
+          }
+        ]
+      },
       {
         test: /\.js$/,
         // loader 绝对路径

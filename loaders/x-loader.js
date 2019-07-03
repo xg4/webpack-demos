@@ -14,4 +14,4 @@ module.exports.pitch = function(remainingRequest, precedingRequest, data) {
   data.value = 1
 }
 
-module.exports.raw = true
+// module.exports.raw = true
