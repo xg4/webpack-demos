@@ -1,0 +1,24 @@
+{
+  "name": "webpack-demos",
+  "version": "1.0.0",
+  "description": "",
+  "keywords": [],
+  "homepage": "https://github.com/xg4/webpack-demos#readme",
+  "bugs": {
+    "url": "https://github.com/xg4/webpack-demos/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xg4/webpack-demos.git"
+  },
+  "license": "MIT",
+  "author": "xg4 <xingor4@gmail.com>",
+  "main": "index.js",
+  "scripts": {
+    "build": "webpack"
+  },
+  "devDependencies": {
+    "webpack": "^4.35.2",
+    "webpack-cli": "^3.3.5"
+  }
+}
